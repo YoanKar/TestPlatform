@@ -1,0 +1,22 @@
+﻿@model AnswerFormViewModel
+
+<form method="post">
+    <input type="hidden" id="questionId" name="questionId" value="@Model.QuestionId">
+    <div class="form-group">
+        <label asp-for="@Model.Content"></label>
+        <input class="form-control" asp-for="@Model.Content">
+        <span asp-validation-for="@Model.Content" class="small text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.IsCorrect"></label>
+        <select class="form-control" asp-for="@Model.IsCorrect">          
+            @foreach (var type in Model.ChoicesList)
+            {
+                <option value="@type.Value">@type.Name</option>
+            }
+        </select>
+          <span asp-validation-for="@Model.IsCorrect" class="small text-danger"></span>
+        <span asp-validation-for="@Model.IsCorrect" class="small text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -1,0 +1,117 @@
+﻿@model QuestionsListingServiceModel
+@{      
+    Layout = "CompeteLayout";
+    ViewData["Title"] = "Compete";
+    var cnt = 1;
+}
+<h1 class="text-center text-primary">@Model.QuestionsList.First().Test.Name</h1>
+<input id="testId" type="hidden" value="@Model.QuestionsList.First().TestId" />
+<input id="duration" type="hidden" value="@Model.DeadLine.ToString("s")" />
+<div class="timer mb-5"><span>Time left: </span><span id="timer"></span></div>
+<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    @foreach (var question in Model.QuestionsList)
+    {
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-12">
+                    <p class="fw-bold mb-2">@cnt. @question.Content</p>
+                    <div>
+                        @if (question.QuestionType == "Closed")
+                        {
+                            @foreach (var answer in question.Answers)
+                            {
+
+                                <label for="@answer.Id" class="box first">
+                                    <div class="course">
+                                        <input type="radio" name="@question.Id" id="@answer.Id">
+                                        <span class="subject">@answer.Content</span>
+                                    </div>
+                                </label>
+                            }
+
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <textarea class="form-control" id="@question.Id" rows="5"></textarea>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        cnt++;
+    }
+    <div class="col-12">
+        <div class="d-flex justify-content-center"> <button class="btn-primary btn-custom btn-primary-custom px-4 py-2 fw-bold" onclick="onClick(event);"> Submit</button> </div>
+    </div>
+</div>
+
+<section>
+
+    <script type="text/javascript" language="javascript">
+        timer();
+        function timer(){
+
+            if(localStorage.deadLine == null){
+                localStorage.deadLine = JSON.stringify(new Date(document.getElementById('duration').value));
+            }
+            const deadLine =new Date(JSON.parse(localStorage.deadLine));
+
+            const timerSpan = document.getElementById('timer');
+            let myTimer;
+
+            startTimer();
+            function getTimeNow(){
+                const now = new Date(Date.now());
+                let date = new Date(deadLine - now);
+                date.setHours(date.getHours() - 2);
+                timerSpan.textContent = date.toString().split(' ')[4];
+                if(now >= deadLine){
+                    onClick();
+                    clearInterval(myTimer)
+                }
+            }
+
+            function startTimer(){
+
+                myTimer = setInterval(getTimeNow, 1000);
+            }
+        }
+        async function onClick(){
+
+            const inputs = [...document.querySelectorAll('input')].filter(x => x.checked);
+            const textInputs = [...document.querySelectorAll('textarea')];
+            const testId = document.getElementById('testId').value;
+            const params = {
+                "TestId": testId,
+                "Answers": []
+            };
+            for(let radio of inputs){
+                const answer = { "QuestionId": radio.name , "AnswerId": radio.id};
+                params.Answers.push(answer);
+            }
+            for (let text of textInputs) {
+                const answer = { "QuestionId": text.id, "TextAnswer": text.value};
+                params.Answers.push(answer);
+            }
+            const json = JSON.stringify(params);
+
+            const response = await fetch('/Users/Tests/Compete', {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+            const points = await response.json();
+
+            alert(`Your points are: ${points}`);
+            localStorage.removeItem('deadLine');
+            document.location = '/Users/Home/Index';
+        }
+    </script>
+</section>

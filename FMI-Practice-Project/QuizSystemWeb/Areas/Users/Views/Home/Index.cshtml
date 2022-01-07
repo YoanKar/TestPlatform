@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ActiveTestsListingServiceModel>
+<h1>User Index</h1>
+
+<a asp-controller="Tests" asp-action="Completed" class="btn btn-success float-right ml-3 mb-3">Completed Tests</a>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Duration</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td scope="col">@test.Name</td>
+                <td scope="col">@test.StartDate</td>
+                <td scope="col">@test.EndDate</td>
+                <td scope="col">@test.Duration</td>
+                <td scope="col">
+                    @if (!test.IsCompleted && test.IsDateInValidRange)
+                    {
+                      <a asp-controller="Tests" asp-action="Compete" asp-route-id=@test.Id class="btn btn-info float-right ml-3">Compete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

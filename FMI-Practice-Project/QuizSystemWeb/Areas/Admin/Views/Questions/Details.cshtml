@@ -1,0 +1,54 @@
+﻿@model QuestionDetailsServiceModel
+
+    <div class="mb-3">
+        <a class="btn btn-light" asp-controller="Tests" asp-action="Details" asp-route-id="@Model.TestId">Back</a>
+    </div>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Content</th>
+            <th scope="col">Points</th>
+            <th scope="col">Type</th>
+             <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td scope="col">@Model.Content</td>
+            <td scope="col">@Model.Points</td>
+            <td scope="col">@Model.QuestionType</td>
+            <td scope="col">
+               
+                @if (Model.QuestionType == "Closed")
+                {
+                    <a asp-controller="Answers" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary float-right ml-3">Add Answer</a>
+                }
+                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@Model.Id" class="btn alert-warning float-right ml-3">Edit Question</a>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Content</th>
+            <th scope="col">Is Correct</th>
+            <th scope="col"></th>        
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var answer in Model.Answers)
+        {
+            <tr>
+            <td scope="col">@answer.Content</td>
+            <td scope="col">@answer.IsCorrect.Name</td>
+            <td scope="col">
+               <a asp-controller="Answers" asp-action="Edit" asp-route-id="@answer.Id" class="btn alert-warning float-right ml-3">Edit Answer</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+﻿@model TestFormModel
+
+@{
+    ViewData["Title"] = "Create Test";
+}
+
+<h2 class="text-center text-primary">@ViewData["Title"]</h2>
+
+
+<div class="mb-3">
+    <a class="btn btn-light" asp-controller="Tests" asp-action="All">Back</a>
+</div>
+
+<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+    <partial name="_TestFormPartial" model="@Model" />
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

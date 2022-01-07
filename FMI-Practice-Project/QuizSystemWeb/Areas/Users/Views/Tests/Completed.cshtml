@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TestServiceModel>
+
+<div class="mb-3">
+    <a class="btn btn-light" asp-controller="Home" asp-action="Index">Back</a>
+</div>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Points</th>
+            <th scope="col">Grade</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td scope="col">@test.Name</td>
+                <td scope="col">@test.Points</td>
+                <td scope="col">@(test.Grade.HasValue ? test.Grade.Value : "Not Evaluated")</td>
+
+                <td scope="col">
+                    <a asp-controller="Tests" asp-action="CheckTestAnswers" asp-route-testId=@test.Id class="btn btn-primary float-right ml-3">Check Test</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

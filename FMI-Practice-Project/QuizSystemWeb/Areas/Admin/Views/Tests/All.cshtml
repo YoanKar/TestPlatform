@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TestServiceModel>
+
+<div>
+    <a asp-controller="Tests" asp-action="EvaluateTests" class="btn btn-info float-right ml-3 mb-3">Evaluate Tests</a>
+    <a asp-controller="Tests" asp-action="Create" class="btn btn-success float-right ml-3 mb-3">Create Test</a>
+</div>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Active</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td scope="col">@test.Name</td>
+                <td scope="col">@(test.IsActive == true ? "Yes" : "No")</td>
+
+
+                <td scope="col">
+                    <a asp-controller="Tests" asp-action="ChangeVisibility" asp-route-id="@test.Id" class="btn alert-danger float-right ml-3">Change Visibility</a>
+                    <a asp-controller="Tests" asp-action="Details" asp-route-id=@test.Id class="btn btn-primary float-right ml-3">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

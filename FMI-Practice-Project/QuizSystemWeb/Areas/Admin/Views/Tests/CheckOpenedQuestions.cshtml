@@ -1,0 +1,58 @@
+﻿@model ICollection<OpenQuestionAnswerServiceModel>
+
+    <div class="mb-3">
+        <a class="btn btn-light" asp-controller="Tests" asp-action="EvaluateTests">Back</a>
+    </div>
+<input type="hidden" id="resultId" value="@Model.First().ResultId"/>
+@foreach (var item in Model)
+{
+    <span>@item.QuestionContent</span>
+    <div class="form-group">
+        <textarea class="form-control" rows="5" disabled>@item.AnswerText</textarea>
+        <label for="@item.QuestionId">Give points</label>
+        <select class="form-control" id="@item.QuestionId" name="pointsForAnswer">
+            <option value="0">0</option>
+            @for (var i = 1; i <= @item.MaxPoints; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+}
+
+<div class="col-12">
+    <div class="d-flex justify-content-center"> <button class="btn-primary btn-custom btn-primary-custom px-4 py-2 fw-bold" onclick="onClick(event);"> Submit</button> </div>
+</div>
+
+
+<section>
+    <script>
+        async function onClick(event){
+            let sum = 0;
+            const resultId = Number(document.getElementById('resultId').value);
+            const params = {};
+            const inputs = [...document.querySelectorAll('select')]
+            for(const input of inputs){
+              sum += Number(input.value)
+            }
+
+            params["Points"] = sum;
+            params["ResultId"] = resultId;
+            
+            const json = JSON.stringify(params);
+
+           
+            
+            const response = await fetch('/Admin/Tests/CheckOpenedQuestions', {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+            
+            document.location = '/Admin/Tests/EvaluateTests';
+
+        }
+    </script>
+</section>

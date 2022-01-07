@@ -1,0 +1,26 @@
+﻿@model ICollection<EvaluatedTestsServiceModel>
+
+    <div class="mb-3">
+        <a class="btn btn-light" asp-controller="Tests" asp-action="EvaluateTests">Back</a>
+    </div>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">User</th>
+            <th scope="col">Points</th>
+            <th scope="col">Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td scope="col">@test.Name</td>
+                <td scope="col">@test.Username</td>
+                <td scope="col">@test.Points</td>
+                <td scope="col">@test.Grade</td>   
+            </tr>
+        }
+    </tbody>
+</table>
